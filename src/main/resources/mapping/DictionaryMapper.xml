@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lw.mapper.DictionaryMapper">
+   <resultMap id="BaseResultMap" type="com.lw.model.Dictionary">
+    <result column="item_id" jdbcType="VARCHAR" property="itemId" />
+    <result column="item_code" jdbcType="VARCHAR" property="itemCode" />
+    <result column="item_name" jdbcType="VARCHAR" property="itemName" />
+    <result column="parent_item_code" jdbcType="VARCHAR" property="parentItemCode" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="is_valid" jdbcType="BOOLEAN" property="valid" />
+    <result column="index" jdbcType="INTEGER" property="index" />
+  </resultMap> 
+	<sql id="columns">
+		item_id, item_code, item_name,
+		parent_item_code, description,index
+	</sql>
+  <insert id="insert" parameterType="com.lw.model.Dictionary">
+    insert into dictionary (item_id, item_code, item_name, 
+      parent_item_code, description, is_valid, index)
+    values (#{itemId,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, 
+      #{parentItemCode,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},#{valid},#{index})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lw.model.Dictionary">
+    insert into dictionary
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="itemId != null">
+        item_id,
+      </if>
+      <if test="itemCode != null">
+        item_code,
+      </if>
+      <if test="itemName != null">
+        item_name,
+      </if>
+      <if test="parentItemCode != null">
+        parent_item_code,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+       <if test="index != null">
+        index,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="itemId != null">
+        #{itemId,jdbcType=VARCHAR},
+      </if>
+      <if test="itemCode != null">
+        #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null">
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentItemCode != null">
+        #{parentItemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="index != null">
+        #{index},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByCondition">
+  update dictionary
+  <set>
+      <if test=" target.itemId != null">
+        item_id = #{target.itemId},
+      </if>
+      <if test=" target.itemCode != null">
+        item_code = #{target.itemCode},
+      </if>
+      <if test=" target.itemName != null">
+        item_name = #{target.itemName},
+      </if>
+      <if test=" target.parentItemCode != null">
+        parent_item_code = #{target.parentItemCode},
+      </if>
+      <if test=" target.description != null">
+        description = #{target.description},
+      </if>
+      <if test=" target.valid != null">
+        is_valid = #{target.valid},
+      </if>
+   </set>
+    <where>
+      <if test=" condition.itemId != null">
+        item_id = #{condition.itemId}
+      </if>
+      <if test=" condition.itemCode != null">
+        and item_code = #{condition.itemCode}
+      </if>
+      <if test=" condition.itemName != null">
+        and item_name = #{condition.itemName}
+      </if>
+      <if test=" condition.parentItemCode != null">
+        and parent_item_code = #{condition.parentItemCode}
+      </if>
+      <if test=" condition.description != null">
+        and description = #{condition.description}
+      </if>
+      <if test=" condition.valid != null">
+        and is_valid = #{condition.valid}
+      </if>
+    </where>
+  </update>
+  
+  <select id="queryAll" resultMap="BaseResultMap">
+  	select <include refid="columns" />
+  	from dictionary
+  	where is_valid = true
+  	<if test="itemId != null">
+  		and item_id = #{itemId}
+  	</if>
+  	order by item_id,index asc
+  </select>
+  
+  <delete id="delete">
+  	 delete from dictionary
+  	 <where>
+  	 <if test=" itemId != null">
+        item_id = #{itemId}
+      </if>
+      <if test=" itemCode != null">
+        and item_code = #{itemCode}
+      </if>
+      <if test=" itemName != null">
+        and item_name = #{itemName}
+      </if>
+      <if test=" parentItemCode != null">
+        and parent_item_code = #{parentItemCode}
+      </if>
+      <if test=" description != null">
+        and description = #{description}
+      </if>
+       <if test=" valid != null">
+        and is_valid = #{valid}
+      </if>
+  	 </where>
+  </delete>
+  
+  <select id="queryOneByItemId" resultMap="BaseResultMap">
+  	select * from dictionary where item_id = #{itemId} and is_valid = true limit 1
+  </select>
+</mapper>

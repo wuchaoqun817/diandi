@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+	<!-- 数据库驱动:选择你的本地硬盘上面的数据库驱动包 -->
+	<classPathEntry
+		location="D:\maven_repository\mysql\mysql-connector-java\8.0.17\mysql-connector-java-8.0.17.jar" />
+	<context id="diandi" targetRuntime="MyBatis3">
+		<!-- 指定生成的java文件的编码,没有直接生成到项目时中文可能会乱码 -->
+		<property name="javaFileEncoding" value="UTF-8" />
+		
+		<!-- lombock插件 -->
+		<plugin type="com.lw.common.generator.LombokPlugin" >
+            <property name="hasLombok" value="true"/>
+        </plugin>
+		
+		<!-- 注解 -->
+		<commentGenerator type="com.lw.common.generator.MyCommentGenerator">
+		</commentGenerator>
+
+		<jdbcConnection driverClass="com.mysql.cj.jdbc.Driver" 
+		connectionURL="jdbc:mysql://localhost:3306/diandi?serverTimezone=Asia/Shanghai&amp;useSSL=false" 
+		userId="root" password="wd75gpH_ueWg">
+        </jdbcConnection>
+		<javaTypeResolver type="com.lw.common.generator.GeneratorTypeResolver">
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<!-- dto class -->
+		<javaModelGenerator targetPackage="com.lw.model"
+		   targetProject="diandi">
+			<property name="enableSubPackages" value="true" />
+		</javaModelGenerator>
+
+ 		<!-- mybatis xml file -->
+<!-- 		<sqlMapGenerator targetPackage="main.resources.mapping"
+			targetProject="diandi"> -->
+		<sqlMapGenerator targetPackage="mapping"
+            targetProject="diandi/src/main/resources/">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator> 
+
+		<!-- mapper class -->
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="com.lw.mapper" targetProject="diandi">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+
+
+		<table tableName="block_video" domainObjectName="BlockVideo"
+		enableCountByExample="false" enableUpdateByExample="false"
+		enableDeleteByExample="false" enableSelectByExample="false"
+		selectByExampleQueryId="false" >
+<!-- 		<generatedKey  column="id" sqlStatement="  SELECT nextval('pre_school_score_id_seq') as id"></generatedKey> -->
+<!-- 	   <columnOverride column="weight" javaType="java.lang.Float"></columnOverride> -->
+		</table>
+	</context>
+</generatorConfiguration>

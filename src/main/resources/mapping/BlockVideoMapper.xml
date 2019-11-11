@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lw.mapper.BlockVideoMapper">
+  <resultMap id="BaseResultMap" type="com.lw.model.BlockVideoKey">
+    <id column="video_id" jdbcType="INTEGER" property="videoId" />
+    <id column="block_id" jdbcType="INTEGER" property="blockId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="com.lw.model.BlockVideoKey">
+    delete from block_video
+    where video_id = #{videoId,jdbcType=INTEGER}
+      and block_id = #{blockId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lw.model.BlockVideoKey">
+    insert into block_video (video_id, block_id)
+    values (#{videoId,jdbcType=INTEGER}, #{blockId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lw.model.BlockVideoKey">
+    insert into block_video
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="videoId != null">
+        video_id,
+      </if>
+      <if test="blockId != null">
+        block_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="videoId != null">
+        #{videoId,jdbcType=INTEGER},
+      </if>
+      <if test="blockId != null">
+        #{blockId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>
