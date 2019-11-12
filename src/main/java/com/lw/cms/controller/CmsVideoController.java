@@ -1,9 +1,10 @@
-package com.lw.controller;
+package com.lw.cms.controller;
 
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,19 +22,15 @@ import com.lw.common.page.ResultWrapper;
 import com.lw.common.utils.Validate;
 import com.lw.context.CoreContext;
 import com.lw.model.Video;
-import com.lw.model.VideoLike;
 import com.lw.query.VideoQuery;
 import com.lw.service.VideoService;
 import com.lw.session.SessionUser;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+@RequestMapping("/cms/videos/")
 @RestController
-@RequestMapping("/videos")
-@Api(tags = "videos")
-public class VideoController {
-
+public class CmsVideoController {
 	@Autowired
 	private VideoService videoService;
 	
@@ -53,6 +50,8 @@ public class VideoController {
 		video.setCreateUserId(user.getUserId());
 		video.setCreateUserName(user.getUserName());
 		video.setCreateTime(new Date());
+		video.setUpdateTime(video.getCreateTime());
+		video.setUpdateUserId(user.getUserId());
 		videoService.saveVideo(video);
 		return Result.success();
 	}
@@ -61,16 +60,10 @@ public class VideoController {
 	@PutMapping("")
 	public Result updateVideo(@RequestBody Video video) {
 		Validate.isNotNull(video.getId());
-		videoService.updateVideo(video);
-		return Result.success();
-	}
-	
-	@ApiOperation("点赞")
-	@PostMapping("/likes")
-	public Result like(@RequestBody VideoLike videoLike) {
 		SessionUser user = CoreContext.getInstance().getLocalUser();
-		videoLike.setUserId(user.getUserId());
-		videoService.likeVideoOrNot(videoLike);
+		video.setUpdateTime(new Date());
+		video.setUpdateUserId(user.getUserId());
+		videoService.updateVideo(video);
 		return Result.success();
 	}
 	
@@ -81,4 +74,10 @@ public class VideoController {
 		return ResultWrapper.success(video);
 	}
 	
+	@ApiOperation("删除视频")
+	@DeleteMapping("/{id}")
+	public Result delete(@PathVariable Integer id){
+		videoService.deleteById(id);
+		return Result.success();
+	}
 }

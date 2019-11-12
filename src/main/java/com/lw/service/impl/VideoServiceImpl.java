@@ -62,4 +62,9 @@ public class VideoServiceImpl implements VideoService {
 		return videoMapper.selectByPrimaryKey(id);
 	}
 
+	@Override
+	public void deleteById(int id) {
+		videoMapper.deleteByPrimaryKey(id);
+	}
+
 }

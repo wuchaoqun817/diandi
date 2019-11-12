@@ -4,7 +4,7 @@ CREATE TABLE `video` (
   `name` varchar(64) DEFAULT NULL COMMENT '视频名称',
   `storage_path` varchar(255) DEFAULT NULL COMMENT '视频存储路径',
   `video_size` bigint(20) DEFAULT NULL COMMENT '视频大小',
-  `create_user_id` int(11) DEFAULT NULL COMMENT '创建者id',
+  `create_user_id` varchar(64) DEFAULT NULL COMMENT '创建者id',
   `create_user_name` varchar(20) DEFAULT NULL COMMENT '创建者名称',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `status` tinyint(2) DEFAULT NULL COMMENT '状态',
@@ -36,7 +36,7 @@ create table block_video(
 
 DROP TABLE IF EXISTS `video_like`;
 CREATE TABLE `video_like` (
-  `user_id` varchar(255) NOT NULL COMMENT '用户Id',
+  `user_id` varchar(64) NOT NULL COMMENT '用户Id',
   `video_id` int(11) NOT NULL COMMENT '视频Id',
   `create_time` datetime DEFAULT NULL COMMENT '点赞时间',
   PRIMARY KEY (`user_id`,`video_id`)

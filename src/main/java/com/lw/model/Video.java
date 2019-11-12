@@ -52,4 +52,13 @@ public class Video {
     private String blockId;
     
     private String blockName;
+    
+    @ApiModelProperty("视频描述")
+    private String detail;
+
+    @ApiModelProperty("更新时间")
+    private Date updateTime;
+    
+    @ApiModelProperty("更新者")
+    private String updateUserId;
 }

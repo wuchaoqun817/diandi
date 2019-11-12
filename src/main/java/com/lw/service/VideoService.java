@@ -17,4 +17,6 @@ public interface VideoService {
 	void likeVideoOrNot(VideoLike videoLike);
 	
 	Video getDetails(int id);
+	
+	void deleteById(int id);
 }

@@ -6,7 +6,7 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="storage_path" jdbcType="VARCHAR" property="storagePath" />
     <result column="video_size" jdbcType="BIGINT" property="videoSize" />
-    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="create_user_id" jdbcType="VARCHAR" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="status" jdbcType="TINYINT" property="status" />
@@ -14,10 +14,13 @@
     <result column="is_selected" jdbcType="BIT" property="selected" />
     <result column="cover" jdbcType="VARCHAR" property="cover" />
     <result column="like_num" jdbcType="VARCHAR" property="likeNum" />
+    <result column="detail" property="detail" />
+    <result column="update_user_id" property="updateUserId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
     id, name, storage_path, video_size, create_user_id, create_user_name, create_time, 
-    status, type, is_selected, cover, like_num
+    status, type, is_selected, cover, like_num, detail, update_user_id, update_time
   </sql>
   <sql id="Alias_Base_Column_List">
     v.id, 
@@ -31,7 +34,10 @@
     v.type, 
     v.is_selected,
     v.cover,
-    v.like_num
+    v.like_num,
+    v.detail,
+    v.update_user_id, 
+    v.update_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -47,11 +53,11 @@
     insert into video (id, name, storage_path, 
       video_size, create_user_id, create_user_name, 
       create_time, status, type, 
-      is_selected, cover)
+      is_selected, cover, detail, update_user_id, update_time)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{storagePath,jdbcType=VARCHAR}, 
-      #{videoSize,jdbcType=BIGINT}, #{createUserId,jdbcType=INTEGER}, #{createUserName,jdbcType=VARCHAR}, 
+      #{videoSize,jdbcType=BIGINT}, #{createUserId}, #{createUserName,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT}, #{type,jdbcType=VARCHAR}, 
-      #{selected,jdbcType=BIT}, #{cover})
+      #{selected,jdbcType=BIT}, #{cover}, #{detail}, #{updateUserId}, #{updateTime})
   </insert>
   <insert id="insertSelective" parameterType="com.lw.model.Video">
     insert into video
@@ -83,12 +89,18 @@
       <if test="type != null">
         type,
       </if>
-      <if test="type != null">
-        type,
-      </if>
       is_selected,
       <if test="cover != null">
         cover,
+      </if>
+      <if test="detail != null">
+      	detail,
+      </if>
+       <if test="updateUserId != null">
+      	update_user_id,
+      </if>
+       <if test="updateTime != null">
+      	update_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -105,7 +117,7 @@
         #{videoSize,jdbcType=BIGINT},
       </if>
       <if test="createUserId != null">
-        #{createUserId,jdbcType=INTEGER},
+        #{createUserId},
       </if>
       <if test="createUserName != null">
         #{createUserName,jdbcType=VARCHAR},
@@ -121,7 +133,16 @@
       </if>
       #{selected,jdbcType=BIT},
       <if test="cover != null">
-      	#{cover}
+      	#{cover},
+      </if>
+      <if test="detail != null">
+      	#{detail},
+      </if>
+      <if test="updateUserId != null">
+      	#{updateUserId},
+      </if>
+       <if test="updateTime != null">
+      	#{updateTime},
       </if>
     </trim>
   </insert>
@@ -138,7 +159,7 @@
         video_size = #{videoSize,jdbcType=BIGINT},
       </if>
       <if test="createUserId != null">
-        create_user_id = #{createUserId,jdbcType=INTEGER},
+        create_user_id = #{createUserId},
       </if>
       <if test="createUserName != null">
         create_user_name = #{createUserName,jdbcType=VARCHAR},
@@ -158,6 +179,15 @@
       <if test="cover != null">
         cover = #{cover,jdbcType=BIT},
       </if>
+      <if test="detail != null">
+      	detail = #{detail},
+      </if>
+      <if test="updateUserId != null">
+      	update_user_id = #{updateUserId},
+      </if>
+       <if test="updateTime != null">
+      	update_time = #{updateTime},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -166,13 +196,16 @@
     set name = #{name,jdbcType=VARCHAR},
       storage_path = #{storagePath,jdbcType=VARCHAR},
       video_size = #{videoSize,jdbcType=BIGINT},
-      create_user_id = #{createUserId,jdbcType=INTEGER},
+      create_user_id = #{createUserId},
       create_user_name = #{createUserName,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=TINYINT},
       type = #{type,jdbcType=VARCHAR},
       is_selected = #{selected,jdbcType=BIT},
-      cover = #{cover}
+      cover = #{cover},
+      detail = #{detail},
+      update_user_id = #{updateUserId},
+      update_time = #{updateTime}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectVideos" resultMap = "BaseResultMap">
@@ -191,6 +224,7 @@
   			and name like concat('%',#{videoName},'%')
   		</if>
   	</where>
+  	order by v.create_time desc
   </select>
   
   <update id="updateLikeNum">

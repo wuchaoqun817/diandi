@@ -48,7 +48,7 @@ public class SessionAspect {
     @Autowired
     private LoginService loginService;
 
-    @Pointcut("(execution(public * com.lw.controller.*.*(..))"
+    @Pointcut("(execution(public * com.lw..*.controller.*.*(..))"
             + "&& !execution(public * com.lw.controller.WxAuthController.*(..)))")
     public void verify() {
     }
